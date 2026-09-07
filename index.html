@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SkyTrack | Flight Tracker</title>
+    <title>SkyTrack | User Dashboard</title>
     <style>
       :root {
         --bg: #06131d;
@@ -31,32 +31,11 @@
         margin: 0;
         font-family: Inter, "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 24%),
-          radial-gradient(circle at right, rgba(139, 92, 246, 0.16), transparent 30%),
+          radial-gradient(circle at top left, rgba(56, 189, 248, 0.15), transparent 24%),
+          radial-gradient(circle at right, rgba(139, 92, 246, 0.12), transparent 30%),
           linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 34%, var(--bg) 100%);
         color: var(--text);
-      }
-
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background: linear-gradient(120deg, transparent 0%, rgba(103, 232, 249, 0.04) 40%, transparent 100%);
-      }
-
-      a { color: inherit; text-decoration: none; }
-      img { max-width: 100%; display: block; }
-      main { overflow: hidden; }
-
-      @keyframes pulseGlow {
-        0%, 100% { box-shadow: 0 0 0 0 rgba(103, 232, 249, 0.25); }
-        50% { box-shadow: 0 0 0 12px rgba(103, 232, 249, 0.05); }
-      }
-
-      @keyframes floatCard {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-6px); }
+        min-height: 100vh;
       }
 
       .container {
@@ -69,7 +48,7 @@
         top: 0;
         z-index: 50;
         backdrop-filter: blur(16px);
-        background: rgba(6, 19, 29, 0.8);
+        background: rgba(6, 19, 29, 0.85);
         border-bottom: 1px solid var(--line);
       }
 
@@ -99,19 +78,21 @@
         box-shadow: 0 12px 28px rgba(56, 189, 248, 0.28);
       }
 
-      .nav-links {
+      .user-profile {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
-        color: var(--muted);
+        gap: 0.8rem;
       }
 
-      .nav-links a:hover { color: var(--text); }
-
-      .nav-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.85rem;
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #06131d;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
       }
 
       .button {
@@ -119,10 +100,12 @@
         align-items: center;
         justify-content: center;
         border-radius: 999px;
-        padding: 0.82rem 1.28rem;
+        padding: 0.7rem 1.2rem;
         font-weight: 700;
-        letter-spacing: 0.01em;
-        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: transform 0.2s ease, filter 0.2s ease;
+        border: none;
       }
 
       .button:hover {
@@ -133,573 +116,254 @@
       .button-primary {
         background: linear-gradient(135deg, var(--primary), var(--primary-strong));
         color: #06131d;
-        box-shadow: 0 14px 26px rgba(56, 189, 248, 0.28);
+        box-shadow: 0 10px 20px rgba(56, 189, 248, 0.24);
       }
 
       .button-secondary {
-        background: rgba(148, 163, 184, 0.04);
+        background: rgba(148, 163, 184, 0.06);
         border: 1px solid var(--line-strong);
         color: var(--text);
       }
 
-      .button-primary:hover {
-        box-shadow: 0 18px 32px rgba(56, 189, 248, 0.34);
+      main {
+        padding: 2.5rem 0 4rem;
       }
 
-      .hero {
-        padding: 4.5rem 0 1rem;
-      }
-
-      .hero-grid {
-        display: grid;
-        grid-template-columns: 1.08fr 0.92fr;
-        gap: 2rem;
-        align-items: center;
-      }
-
-      .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding: 0.55rem 0.85rem;
-        border: 1px solid rgba(103, 232, 249, 0.2);
-        background: rgba(103, 232, 249, 0.06);
-        color: var(--primary);
-        font-size: 0.72rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        border-radius: 999px;
-      }
-
-      h1 {
-        font-size: clamp(2.9rem, 5vw, 5.4rem);
-        line-height: 0.97;
-        letter-spacing: -0.06em;
-        margin: 1.2rem 0 1rem;
-      }
-
-      .lead {
-        max-width: 640px;
-        color: var(--muted);
-        font-size: 1.08rem;
-        line-height: 1.75;
-      }
-
-      .hero-actions {
+      .dashboard-header {
         display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
         gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: 1.8rem;
       }
 
-      .stats {
-        display: flex;
-        flex-wrap: wrap;
-        gap: clamp(1rem, 2.2vw, 2.1rem);
-        margin-top: 2rem;
+      .dashboard-header h1 {
+        margin: 0 0 0.4rem;
+        font-size: clamp(2rem, 3vw, 2.6rem);
+        letter-spacing: -0.04em;
       }
 
-      .stat strong {
-        display: block;
-        font-size: clamp(1.5rem, 2vw, 2rem);
-      }
-
-      .stat span {
+      .dashboard-header p {
+        margin: 0;
         color: var(--muted);
-        font-size: 0.95rem;
       }
 
-      .search-panel {
+      /* Quick Search Bar */
+      .quick-search {
         display: flex;
-        align-items: center;
         gap: 0.8rem;
-        margin-top: 1.6rem;
-        padding: 0.8rem;
-        max-width: 620px;
-        background: rgba(9, 18, 29, 0.9);
-        border: 1px solid rgba(103, 232, 249, 0.18);
+        background: rgba(10, 22, 34, 0.85);
+        border: 1px solid rgba(103, 232, 249, 0.2);
+        padding: 0.6rem;
         border-radius: 18px;
-        box-shadow: 0 16px 32px rgba(7, 17, 31, 0.34);
+        box-shadow: 0 12px 30px rgba(4, 10, 18, 0.4);
+        margin-bottom: 2.5rem;
       }
 
-      .search-panel input {
+      .quick-search input {
         flex: 1;
+        background: transparent;
         border: none;
         outline: none;
-        background: transparent;
         color: var(--text);
+        padding: 0.7rem 1rem;
         font-size: 1rem;
-        padding: 0.85rem 0.9rem;
       }
 
-      .search-panel input::placeholder {
-        color: rgba(169, 192, 217, 0.7);
+      .quick-search input::placeholder {
+        color: rgba(169, 192, 217, 0.6);
       }
 
-      .search-panel .button {
-        white-space: nowrap;
+      /* Layout grid */
+      .workspace-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
       }
 
-      .map-panel {
-        position: relative;
-        background: linear-gradient(180deg, rgba(16, 35, 52, 0.95), rgba(9, 22, 34, 0.96));
+      .panel {
+        background: rgba(9, 20, 30, 0.75);
         border: 1px solid var(--line);
-        border-radius: 30px;
-        overflow: hidden;
-        box-shadow: var(--shadow);
-        animation: floatCard 7s ease-in-out infinite;
+        border-radius: 24px;
+        padding: 1.5rem;
       }
 
-      .map-panel::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(103, 232, 249, 0.05), transparent 35%, rgba(139, 92, 246, 0.08));
-        pointer-events: none;
-      }
-
-      .map-header {
+      .panel-title {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 1.1rem;
-        border-bottom: 1px solid var(--line);
+        margin-bottom: 1.2rem;
       }
 
-      .map-header span {
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-size: 0.76rem;
+      .panel-title h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .watchlist-card {
+        background: rgba(14, 30, 46, 0.7);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+        transition: border-color 0.2s ease;
+      }
+
+      .watchlist-card:hover {
+        border-color: rgba(103, 232, 249, 0.35);
+      }
+
+      .flight-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.6rem;
+      }
+
+      .flight-number {
+        font-weight: 800;
+        font-size: 1.1rem;
+        letter-spacing: 0.02em;
       }
 
       .status-pill {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
+        padding: 0.35rem 0.65rem;
         border-radius: 999px;
-        padding: 0.45rem 0.7rem;
-        background: rgba(52, 211, 153, 0.12);
-        color: var(--success);
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 700;
       }
 
-      .status-pill::before {
-        content: "";
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        display: inline-block;
-        background: var(--success);
-      }
+      .status-on-time { background: rgba(52, 211, 153, 0.12); color: var(--success); }
+      .status-delayed { background: rgba(251, 191, 36, 0.12); color: var(--warning); }
 
-      .map-surface {
-        position: relative;
-        height: 430px;
-        background:
-          linear-gradient(transparent 96%, rgba(148, 163, 184, 0.12) 96%),
-          linear-gradient(90deg, transparent 96%, rgba(148, 163, 184, 0.12) 96%),
-          #081827;
-        background-size: 28px 28px, 28px 28px, auto;
-      }
-
-      .route {
-        position: absolute;
-        inset: 0;
-      }
-
-      .route svg {
-        width: 100%;
-        height: 100%;
-      }
-
-      .flight-dot {
-        position: absolute;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: var(--primary);
-        box-shadow: 0 0 0 7px rgba(103, 232, 249, 0.12);
-      }
-
-      .flight-dot.alt {
-        background: var(--accent);
-        box-shadow: 0 0 0 7px rgba(139, 92, 246, 0.12);
-      }
-
-      .flight-card {
-        position: absolute;
-        right: 1.15rem;
-        bottom: 1.15rem;
-        width: 250px;
-        background: rgba(7, 19, 29, 0.97);
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        padding: 1rem;
-        box-shadow: var(--shadow);
-        animation: pulseGlow 4s ease-in-out infinite;
-      }
-
-      .flight-card-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-      }
-
-      .flight-code {
-        font-size: 1.18rem;
-        font-weight: 800;
-      }
-
-      .flight-route {
-        margin: 0.6rem 0 0.9rem;
+      .route-info {
         color: var(--muted);
-      }
-
-      .flight-meta {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.8rem;
-        color: var(--muted);
-      }
-
-      .features, .dashboard, .network, .testimonials, .cta {
-        padding-top: 5rem;
-      }
-
-      .section-head {
-        text-align: center;
-        margin-bottom: 2rem;
-      }
-
-      .section-head h2 {
-        margin: 0 0 0.8rem;
-        font-size: clamp(2rem, 3vw, 3rem);
-        letter-spacing: -0.04em;
-      }
-
-      .section-head p {
-        max-width: 650px;
-        margin: 0 auto;
-        color: var(--muted);
-        line-height: 1.7;
-      }
-
-      .feature-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 1.2rem;
-      }
-
-      .feature-card {
-        background: rgba(10, 22, 34, 0.66);
-        border: 1px solid var(--line);
-        border-radius: 22px;
-        padding: 1.5rem;
-        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-      }
-
-      .feature-card:hover {
-        transform: translateY(-4px);
-        border-color: rgba(103, 232, 249, 0.35);
-        box-shadow: 0 18px 30px rgba(3, 8, 14, 0.24);
-      }
-
-      .feature-icon {
-        width: 52px;
-        height: 52px;
-        display: grid;
-        place-items: center;
-        border-radius: 16px;
-        background: linear-gradient(135deg, rgba(103, 232, 249, 0.14), rgba(139, 92, 246, 0.18));
-        color: var(--primary);
-        font-size: 1.4rem;
+        font-size: 0.95rem;
         margin-bottom: 1rem;
       }
 
-      .feature-card h3 {
-        margin: 0 0 0.7rem;
-        font-size: 1.15rem;
-      }
-
-      .feature-card p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.7;
-      }
-
-      .dashboard-grid {
+      .flight-metrics-grid {
         display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 1.4rem;
-      }
-
-      .panel {
-        background: rgba(9, 20, 30, 0.7);
-        border: 1px solid var(--line);
-        border-radius: 24px;
-        padding: 1.3rem;
-      }
-
-      .panel-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        font-size: 0.82rem;
+        color: var(--muted);
+        background: rgba(6, 15, 24, 0.5);
+        padding: 0.8rem;
+        border-radius: 12px;
         margin-bottom: 1rem;
       }
 
-      .panel-header h3 {
-        margin: 0;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      th, td {
-        text-align: left;
-        padding: 0.9rem 0.7rem;
-        border-bottom: 1px solid var(--line);
-        color: var(--muted);
-      }
-
-      th {
-        font-size: 0.76rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #d9eafc;
-      }
-
-      tbody tr:last-child td {
-        border-bottom: none;
-      }
-
-      .status-tag {
-        display: inline-flex;
-        padding: 0.4rem 0.7rem;
-        border-radius: 999px;
-        font-size: 0.76rem;
-        font-weight: 700;
-      }
-
-      .status-on-time {
-        background: rgba(52, 211, 153, 0.1);
-        color: var(--success);
-      }
-
-      .status-delayed {
-        background: rgba(251, 191, 36, 0.1);
-        color: var(--warning);
-      }
-
-      .status-cancelled {
-        background: rgba(251, 113, 133, 0.09);
-        color: var(--danger);
-      }
-
-      .mini-stack {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .metric-box {
-        padding: 1.2rem;
-        border: 1px solid var(--line);
-        background: rgba(18, 35, 54, 0.8);
-        border-radius: 18px;
-      }
-
-      .metric-box .label {
-        color: var(--muted);
-        font-size: 0.78rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .metric-box strong {
+      .flight-metrics-grid strong {
         display: block;
-        margin-top: 0.45rem;
-        font-size: 2rem;
+        color: var(--text);
+        font-size: 0.95rem;
+        margin-top: 0.2rem;
       }
 
-      .progress {
-        margin-top: 1rem;
-        height: 10px;
+      .progress-bar-container {
+        height: 8px;
+        background: rgba(148, 163, 184, 0.1);
         border-radius: 999px;
-        background: rgba(148, 163, 184, 0.08);
         overflow: hidden;
       }
 
-      .progress span {
-        display: block;
-        width: 73%;
+      .progress-fill {
         height: 100%;
-        border-radius: inherit;
         background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: inherit;
       }
 
-      .airport-grid {
+      /* Sidebar widgets */
+      .sidebar-stack {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1rem;
+        gap: 1.5rem;
       }
 
-      .airport-card {
-        padding: 1.5rem;
-        border-radius: 20px;
-        background: rgba(11, 24, 36, 0.8);
-        border: 1px solid var(--line);
-      }
-
-      .airport-card strong {
-        display: block;
-        margin: 0.45rem 0;
-        font-size: 1.3rem;
-      }
-
-      .airport-sub {
-        color: var(--muted);
-      }
-
-      .airport-stat {
+      .toggle-row {
         display: flex;
         justify-content: space-between;
-        margin-top: 1rem;
-        padding-top: 0.9rem;
-        border-top: 1px solid var(--line);
-        color: var(--muted);
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.92rem;
       }
 
-      .testimonials-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1rem;
+      .toggle-row:last-child {
+        border-bottom: none;
       }
 
-      .quote-card {
-        background: rgba(10, 20, 31, 0.72);
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        padding: 1.4rem;
-        transition: transform 0.2s ease, border-color 0.2s ease;
+      /* Switch style */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
       }
 
-      .quote-card:hover {
-        transform: translateY(-3px);
-        border-color: rgba(103, 232, 249, 0.28);
+      .switch input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
       }
 
-      .quote-card p {
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        inset: 0;
+        background-color: #1e293b;
+        transition: .3s;
+        border-radius: 24px;
+        border: 1px solid var(--line-strong);
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: var(--muted);
+        transition: .3s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: var(--primary-strong);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(20px);
+        background-color: #06131d;
+      }
+
+      .partner-banner {
+        background: linear-gradient(135deg, rgba(103, 232, 249, 0.08), rgba(139, 92, 246, 0.08));
+        border: 1px solid rgba(103, 232, 249, 0.2);
+        border-radius: 18px;
+        padding: 1.2rem;
+        text-align: center;
+      }
+
+      .partner-banner h4 {
+        margin: 0 0 0.4rem;
+        font-size: 1rem;
+      }
+
+      .partner-banner p {
         margin: 0 0 1rem;
         color: var(--muted);
-        line-height: 1.8;
+        font-size: 0.85rem;
       }
 
-      .person {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-      }
-
-      .avatar {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        color: #06131d;
-        display: grid;
-        place-items: center;
-        font-weight: 800;
-      }
-
-      .person strong {
-        display: block;
-      }
-
-      .person span {
-        color: var(--muted);
-        font-size: 0.82rem;
-      }
-
-      .cta-box {
-        margin: 5rem 0 5rem;
-        padding: 2rem;
-        border: 1px solid rgba(103, 232, 249, 0.2);
-        border-radius: 28px;
-        background: linear-gradient(135deg, rgba(103, 232, 249, 0.09), rgba(139, 92, 246, 0.08));
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1.15rem;
-      }
-
-      .cta-box h3 {
-        margin: 0 0 0.5rem;
-        font-size: clamp(1.8rem, 2.5vw, 2.8rem);
-        letter-spacing: -0.04em;
-      }
-
-      .cta-box p {
-        margin: 0;
-        color: var(--muted);
-      }
-
-      footer {
-        padding: 2rem 0 3rem;
-        border-top: 1px solid var(--line);
-        color: var(--muted);
-      }
-
-      .footer-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-
-      @media (max-width: 980px) {
-        .hero-grid,
-        .dashboard-grid,
-        .feature-grid,
-        .airport-grid,
-        .testimonials-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-
-        .hero-grid { grid-template-columns: 1fr; }
-        .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .nav-links { display: none; }
-      }
-
-      @media (max-width: 640px) {
-        .feature-grid,
-        .dashboard-grid,
-        .airport-grid,
-        .testimonials-grid {
+      @media (max-width: 900px) {
+        .workspace-grid {
           grid-template-columns: 1fr;
-        }
-
-        .search-panel {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .cta-box {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .nav-actions {
-          gap: 0.5rem;
-        }
-
-        .button {
-          padding: 0.75rem 1rem;
         }
       }
     </style>
@@ -707,338 +371,186 @@
   <body>
     <header>
       <div class="container nav">
-        <a href="#" class="brand" aria-label="SkyTrack home">
+        <a href="#" class="brand">
           <span class="brand-mark">S</span>
           <span>SkyTrack</span>
         </a>
 
-        <nav class="nav-links" aria-label="Main navigation">
-          <a href="#features">Features</a>
-          <a href="#dashboard">Dashboard</a>
-          <a href="#network">Airports</a>
-          <a href="#reviews">Reviews</a>
-        </nav>
-
-        <div class="nav-actions">
-          <a href="#" class="button button-secondary">Sign in</a>
-          <a href="#" class="button button-primary">Book demo</a>
+        <div class="user-profile">
+          <div class="avatar">U</div>
+          <span style="font-weight: 600; font-size: 0.95rem;">My Workspace</span>
         </div>
       </div>
     </header>
 
-    <main>
-      <section class="hero">
-        <div class="container hero-grid">
-          <div>
-            <span class="eyebrow">Live aviation intelligence</span>
-            <h1>Track every flight with confidence.</h1>
-            <p class="lead">
-              Monitor departures, arrivals, delays, aircraft routes, and airport health in real time from a single streamlined platform designed for travelers, operations teams, and aviation enthusiasts.
-            </p>
+    <main class="container">
+      <div class="dashboard-header">
+        <div>
+          <h1>Flight Control Center</h1>
+          <p>Monitor your active watchlists, telemetry updates, and instant alert preferences.</p>
+        </div>
+        <button class="button button-primary" onclick="addNewFlightPrompt()">+ Track New Flight</button>
+      </div>
 
-            <div class="search-panel" aria-label="Search flights">
-              <input type="text" placeholder="Search flights, routes, or airports" />
-              <a href="#dashboard" class="button button-primary">Search flights</a>
-            </div>
+      <!-- Quick Search Bar -->
+      <div class="quick-search">
+        <input type="text" id="flightSearchInput" placeholder="Quick lookup by flight code (e.g., UA 412, LH 902)..." />
+        <button class="button button-primary" onclick="searchFlightAction()">Search & Pin</button>
+      </div>
 
-            <div class="hero-actions">
-              <a href="#dashboard" class="button button-primary">View live board</a>
-              <a href="#features" class="button button-secondary">Explore features</a>
-            </div>
-
-            <div class="stats" aria-label="Key metrics">
-              <div class="stat">
-                <strong>3.2M</strong>
-                <span>Flights tracked</span>
-              </div>
-              <div class="stat">
-                <strong>97.8%</strong>
-                <span>Realtime visibility</span>
-              </div>
-              <div class="stat">
-                <strong>24/7</strong>
-                <span>Monitoring</span>
-              </div>
-            </div>
+      <div class="workspace-grid">
+        <!-- Main Watchlist Area -->
+        <div class="panel">
+          <div class="panel-title">
+            <h3>Active Watchlist</h3>
+            <span style="color: var(--muted); font-size: 0.85rem;" id="watchlistCount">3 flights pinned</span>
           </div>
 
-          <div class="map-panel" id="dashboard" aria-label="Live flight map preview">
-            <div class="map-header">
-              <span>Global network</span>
-              <span class="status-pill">Live</span>
-            </div>
-
-            <div class="map-surface">
-              <div class="route">
-                <svg viewBox="0 0 420 420" aria-label="Flight map path">
-                  <path d="M30 300 C110 250, 155 255, 205 230 S330 170, 390 90" fill="none" stroke="rgba(103, 232, 249, 0.75)" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 10"/>
-                  <path d="M40 110 C120 160, 170 150, 230 165 S310 200, 390 240" fill="none" stroke="rgba(139, 92, 246, 0.75)" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 10"/>
-                </svg>
+          <div id="watchlistContainer">
+            <!-- Flight Card 1 -->
+            <div class="watchlist-card">
+              <div class="flight-top-row">
+                <span class="flight-number">SK 284</span>
+                <span class="status-pill status-on-time">On Time</span>
+              </div>
+              <div class="route-info">New York (JFK) → London (LHR)</div>
+              
+              <div class="flight-metrics-grid">
+                <div>Altitude<strong>35,000 ft</strong></div>
+                <div>Ground Speed<strong>540 mph</strong></div>
+                <div>Est. Arrival<strong>08:42 AM</strong></div>
               </div>
 
-              <div class="flight-dot" style="left: 25%; top: 60%;"></div>
-              <div class="flight-dot alt" style="left: 68%; top: 33%;"></div>
-              <div class="flight-dot" style="left: 48%; top: 65%;"></div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem;">
+                <span>Flight Progress</span>
+                <span>72%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-fill" style="width: 72%;"></div>
+              </div>
+            </div>
 
-              <div class="flight-card">
-                <div class="flight-card-row">
-                  <span class="flight-code">SK 284</span>
-                  <span class="status-pill">On time</span>
-                </div>
-                <div class="flight-route">New York → London</div>
-                <div class="flight-meta">
-                  <span>ETA</span>
-                  <strong>08:42</strong>
-                </div>
-                <div class="flight-meta">
-                  <span>Altitude</span>
-                  <strong>35,000 ft</strong>
-                </div>
+            <!-- Flight Card 2 -->
+            <div class="watchlist-card">
+              <div class="flight-top-row">
+                <span class="flight-number">AF 118</span>
+                <span class="status-pill status-delayed">Delayed (+24m)</span>
+              </div>
+              <div class="route-info">Paris (CDG) → Dubai (DXB)</div>
+              
+              <div class="flight-metrics-grid">
+                <div>Altitude<strong>28,400 ft</strong></div>
+                <div>Ground Speed<strong>512 mph</strong></div>
+                <div>Est. Arrival<strong>09:39 AM</strong></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem;">
+                <span>Flight Progress</span>
+                <span>45%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-fill" style="width: 45%;"></div>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <section class="features" id="features">
-        <div class="container">
-          <div class="section-head">
-            <h2>Built for real-world travel decisions</h2>
-            <p>
-              From daily trips to high-volume airport operations, SkyTrack helps you stay informed with smart tools and live visibility.
-            </p>
-          </div>
-
-          <div class="feature-grid">
-            <article class="feature-card">
-              <div class="feature-icon">✈️</div>
-              <h3>Live flight tracking</h3>
-              <p>Track aircraft positions, routes, times, and status changes with precise, continuously updated flight data.</p>
-            </article>
-
-            <article class="feature-card">
-              <div class="feature-icon">📡</div>
-              <h3>Instant alerts</h3>
-              <p>Receive updates on delays, gate switches, cancellations, and disruptions before they become costly.</p>
-            </article>
-
-            <article class="feature-card">
-              <div class="feature-icon">🧭</div>
-              <h3>Route intelligence</h3>
-              <p>Understand departures, arrivals, and flight behavior across global networks and airport clusters.</p>
-            </article>
-
-            <article class="feature-card">
-              <div class="feature-icon">📊</div>
-              <h3>Operational clarity</h3>
-              <p>Review trends, monitor station health, and keep teams aligned with an intuitive flight dashboard.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="dashboard">
-        <div class="container">
-          <div class="section-head">
-            <h2>Live operations board</h2>
-            <p>Track the status of key flights and operations across your network in a clean, decision-ready interface.</p>
-          </div>
-
-          <div class="dashboard-grid">
-            <div class="panel">
-              <div class="panel-header">
-                <h3>Flight status</h3>
-                <span class="status-pill">Updated 12 sec ago</span>
-              </div>
-
-              <table>
-                <thead>
-                  <tr>
-                    <th>Flight</th>
-                    <th>Route</th>
-                    <th>ETA</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>SK 284</td>
-                    <td>JFK → LHR</td>
-                    <td>08:42</td>
-                    <td><span class="status-tag status-on-time">On time</span></td>
-                  </tr>
-                  <tr>
-                    <td>AF 118</td>
-                    <td>CDG → DXB</td>
-                    <td>09:15</td>
-                    <td><span class="status-tag status-delayed">Delayed</span></td>
-                  </tr>
-                  <tr>
-                    <td>BA 203</td>
-                    <td>LAX → LHR</td>
-                    <td>10:34</td>
-                    <td><span class="status-tag status-on-time">On time</span></td>
-                  </tr>
-                  <tr>
-                    <td>DL 455</td>
-                    <td>ATL → AMS</td>
-                    <td>11:02</td>
-                    <td><span class="status-tag status-cancelled">Cancelled</span></td>
-                  </tr>
-                </tbody>
-              </table>
+        <!-- Sidebar Configuration Area -->
+        <div class="sidebar-stack">
+          <div class="panel">
+            <div class="panel-title">
+              <h3>Live Alert Preferences</h3>
+            </div>
+            
+            <div class="toggle-row">
+              <span>Push Notifications</span>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="slider"></span>
+              </label>
             </div>
 
-            <div class="mini-stack">
-              <div class="metric-box">
-                <div class="label">On-time performance</div>
-                <strong>87%</strong>
-                <div class="progress"><span></span></div>
-              </div>
+            <div class="toggle-row">
+              <span>Gate Change Alerts</span>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
 
-              <div class="metric-box">
-                <div class="label">Gate activity</div>
-                <strong>244</strong>
-                <div class="progress"><span style="width: 82%"></span></div>
-              </div>
+            <div class="toggle-row">
+              <span>Severe Weather Warnings</span>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <span>SMS Status Updates</span>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="slider"></span>
+              </label>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section class="network" id="network">
-        <div class="container">
-          <div class="section-head">
-            <h2>Global airport coverage</h2>
-            <p>Connect with major hubs and regional gateways across the world with complete route visibility and reliability insight.</p>
-          </div>
-
-          <div class="airport-grid">
-            <article class="airport-card">
-              <div class="airport-sub">North America</div>
-              <strong>JFK</strong>
-              <div class="airport-sub">New York</div>
-              <div class="airport-stat"><span>Flights</span><strong>186</strong></div>
-            </article>
-
-            <article class="airport-card">
-              <div class="airport-sub">Europe</div>
-              <strong>LHR</strong>
-              <div class="airport-sub">London</div>
-              <div class="airport-stat"><span>Flights</span><strong>214</strong></div>
-            </article>
-
-            <article class="airport-card">
-              <div class="airport-sub">Middle East</div>
-              <strong>DXB</strong>
-              <div class="airport-sub">Dubai</div>
-              <div class="airport-stat"><span>Flights</span><strong>198</strong></div>
-            </article>
+          <div class="partner-banner">
+            <h4>Ready to Book Tickets?</h4>
+            <p>Connect with our airline partner API to transition directly from tracking to booking seats seamlessly.</p>
+            <button class="button button-secondary" style="width: 100%;" onclick="alert('Redirecting to global airline booking gateway...')">Explore Booking Partners</button>
           </div>
         </div>
-      </section>
-
-      <section class="testimonials" id="reviews">
-        <div class="container">
-          <div class="section-head">
-            <h2>Loved by operators and travelers</h2>
-            <p>Teams rely on SkyTrack to make quicker, better-informed decisions every day.</p>
-          </div>
-
-          <div class="testimonials-grid">
-            <article class="quote-card">
-              <p>“We cut response time to disruptions dramatically. The interface is clean, clear, and the flight data feels trustworthy.”</p>
-              <div class="person">
-                <div class="avatar">A</div>
-                <div>
-                  <strong>Alicia M.</strong>
-                  <span>Airport Ops Lead</span>
-                </div>
-              </div>
-            </article>
-
-            <article class="quote-card">
-              <p>“Perfect for travelers who want real updates without the noise. I can see delays and ETAs at a glance before leaving home.”</p>
-              <div class="person">
-                <div class="avatar">D</div>
-                <div>
-                  <strong>Daniel P.</strong>
-                  <span>Frequent Flyer</span>
-                </div>
-              </div>
-            </article>
-
-            <article class="quote-card">
-              <p>“The dashboard makes priority monitoring feel effortless. It gives our team enough context to react early and confidently.”</p>
-              <div class="person">
-                <div class="avatar">S</div>
-                <div>
-                  <strong>Sophia R.</strong>
-                  <span>Travel Manager</span>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="cta">
-        <div class="container">
-          <div class="cta-box">
-            <div>
-              <h3>Ready to fly smarter?</h3>
-              <p>Bring live flight intelligence into the way your team plans, tracks, and responds.</p>
-            </div>
-            <a href="#" class="button button-primary">Start free trial</a>
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
 
-    <footer>
-      <div class="container footer-row">
-        <div>© 2026 SkyTrack</div>
-        <div>Flight data dashboard</div>
-      </div>
-    </footer>
-
-    <!-- Interactive Pop-up Modal Code -->
-    <div id="demoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
-        <div style="background:#0f172a; padding:25px; border-radius:16px; width:90%; max-width:400px; color:#fff; border:1px solid rgba(255,255,255,0.1); text-align:center;">
-            <h3 id="modalTitle" style="margin-bottom:15px; font-size:20px;">Get Started</h3>
-            <p style="margin-bottom:20px; color:#94a3b8; font-size:14px;">Enter your email to continue with SkyTrack.</p>
-            <input type="email" placeholder="name@example.com" style="width:100%; padding:12px; border-radius:8px; border:1px solid #334155; background:#1e293b; color:#fff; margin-bottom:15px;" />
-            <button onclick="closeModal()" style="width:100%; padding:12px; border-radius:8px; background:#38bdf8; color:#0f172a; font-weight:600; border:none; margin-bottom:10px; cursor:pointer;">Submit</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#94a3b8; cursor:pointer; font-size:14px;">Close</button>
-        </div>
-    </div>
-
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const modal = document.getElementById('demoModal');
-            const modalTitle = document.getElementById('modalTitle');
-            
-            document.querySelectorAll('button, a').forEach(el => {
-                const text = el.innerText.trim();
-                if (text.includes('Sign in') || text.includes('Book demo') || text.includes('Start free trial')) {
-                    el.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        if (text.includes('Sign in')) {
-                            modalTitle.innerText = 'Sign in to SkyTrack';
-                        } else if (text.includes('Book demo')) {
-                            modalTitle.innerText = 'Book Your Live Demo';
-                        } else {
-                            modalTitle.innerText = 'Start Your Free Trial';
-                        }
-                        modal.style.display = 'flex';
-                    });
-                }
-            });
-        });
-
-        function closeModal() {
-            document.getElementById('demoModal').style.display = 'none';
+      function searchFlightAction() {
+        const input = document.getElementById('flightSearchInput');
+        const flightVal = input.value.trim().toUpperCase();
+        
+        if (!flightVal) {
+          alert('Please enter a valid flight code or route.');
+          return;
         }
+
+        const container = document.getElementById('watchlistContainer');
+        const newCard = document.createElement('div');
+        newCard.className = 'watchlist-card';
+        newCard.innerHTML = `
+          <div class="flight-top-row">
+            <span class="flight-number">${flightVal}</span>
+            <span class="status-pill status-on-time">On Time</span>
+          </div>
+          <div class="route-info">Custom Pinned Route → Active Telemetry</div>
+          
+          <div class="flight-metrics-grid">
+            <div>Altitude<strong>31,000 ft</strong></div>
+            <div>Ground Speed<strong>495 mph</strong></div>
+            <div>Est. Arrival<strong>Just Added</strong></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem;">
+            <span>Flight Progress</span>
+            <span>15%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-fill" style="width: 15%;"></div>
+          </div>
+        `;
+        
+        container.prepend(newCard);
+        input.value = '';
+        alert(`Flight ${flightVal} has been successfully added to your active watchlist!`);
+      }
+
+      function addNewFlightPrompt() {
+        const code = prompt("Enter Flight Code to Track (e.g., DL 892):");
+        if (code) {
+          document.getElementById('flightSearchInput').value = code;
+          searchFlightAction();
+        }
+      }
     </script>
   </body>
 </html>
